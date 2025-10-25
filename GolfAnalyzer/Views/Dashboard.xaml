@@ -1,0 +1,314 @@
+﻿<UserControl x:Class="GolfAnalyzer.Views.Dashboard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:oxy="clr-namespace:OxyPlot.SkiaSharp.Wpf;assembly=OxyPlot.SkiaSharp.Wpf"
+             xmlns:ico="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:local="clr-namespace:GolfAnalyzer.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="500"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Margin="1">
+            <MediaElement x:Name="Media1"
+                      Source="{Binding Video1Source}"
+                      LoadedBehavior="Manual"
+                      UnloadedBehavior="Stop"
+                      Stretch="Uniform"
+                      ScrubbingEnabled="True"
+                      MediaOpened="Media1_OnMediaOpened"
+                      MediaFailed="Media1_OnMediaFailed"
+                      MediaEnded="Media1_OnMediaEnded" />
+        </Border>
+
+        <Border Grid.Column="1" Margin="1">
+            <MediaElement x:Name="Media2"
+                      Source="{Binding Video2Source}"
+                      LoadedBehavior="Manual"
+                      UnloadedBehavior="Stop"
+                      Stretch="Uniform"
+                      ScrubbingEnabled="True"
+                      MediaOpened="Media2_OnMediaOpened"
+                      MediaFailed="Media2_OnMediaFailed"
+                      MediaEnded="Media2_OnMediaEnded" />
+        </Border>
+
+        <Grid Grid.Column="2">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0"
+                    Background="#2F2F2F"
+                    CornerRadius="6"
+                    Padding="8"
+                    Margin="0,0,0,6">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                    <TextBlock Text="Your swing matches professional standards by"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Foreground="Orange"
+                               FontSize="20"
+                               FontWeight="Bold"/>
+                    <TextBlock Text="{Binding ScorePercent, StringFormat={}{0:0} %}"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               Foreground="Orange"
+                               FontSize="80"
+                               FontWeight="Bold">
+                        <TextBlock.Effect>
+                            <DropShadowEffect Color="Red" BlurRadius="12" ShadowDepth="0" Opacity="0.85"/>
+                        </TextBlock.Effect>
+                    </TextBlock>
+                </StackPanel>
+                
+            </Border>
+
+            <!-- Row indexes shifted by +1 below -->
+
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" Background="#2F2F2F" CornerRadius="3" Padding="8,4" Height="28">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ComboBox Grid.Column="0"
+                                  ItemsSource="{Binding Plot1Options}"
+                                  SelectedItem="{Binding SelectedPlot1Option}"
+                                  Width="240" Height="22"
+                                  Style="{StaticResource DarkComboBox}"/>
+                        <Border Grid.Column="1" />
+                        <Button Grid.Column="3" Width="28" Height="22" Margin="4,0,0,0"
+                                Background="Transparent" BorderBrush="Transparent"
+                                Foreground="#DDDDDD" ToolTip="Info"
+                                FontFamily="Segoe MDL2 Assets" Content="&#xE946;"/>
+                    </Grid>
+                </Border>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <oxy:PlotView Model="{Binding Plot1}" Grid.Column="0" Margin="10"/>
+                    <Border Grid.Column="1" Margin="0,10,10,10" Background="#262626" CornerRadius="4" Padding="6">
+                        <StackPanel>
+
+                            <Border Background="#333333" CornerRadius="3" Padding="6" Margin="0,4,0,4">
+                                <StackPanel>
+                                    <TextBlock Text="Max Speed" Foreground="#AFAFAF" FontSize="11"/>
+                                    <TextBlock Text="{Binding MaxSpeed1, StringFormat={}{0:F1} km/h}" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Background="#333333" CornerRadius="3" Padding="6" Margin="0,4,0,4">
+                                <StackPanel>
+                                    <TextBlock Text="Max Timing" Foreground="#AFAFAF" FontSize="11"/>
+                                    <TextBlock Text="{Binding MaxTiming1, StringFormat={}{0:F1} ms}" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Background="#333333" CornerRadius="3" Padding="6" Margin="0,4,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Ratio Factor" Foreground="#AFAFAF" FontSize="11"/>
+                                    <TextBlock Text="{Binding RatioFactor1, StringFormat={}{0:F2}}" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" Background="#2F2F2F" CornerRadius="3" Padding="8,4" Height="28">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ComboBox Grid.Column="0"
+                                  ItemsSource="{Binding Plot2Options}"
+                                  SelectedItem="{Binding SelectedPlot2Option}"
+                                  Width="240" Height="22"
+                                  Style="{StaticResource DarkComboBox}"/>
+                        <Border Grid.Column="1" />
+                        <Button Grid.Column="3" Width="28" Height="22" Margin="4,0,0,0"
+                                Background="Transparent" BorderBrush="Transparent"
+                                Foreground="#DDDDDD" ToolTip="Info"
+                                FontFamily="Segoe MDL2 Assets" Content="&#xE946;"/>
+                    </Grid>
+                </Border>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <oxy:PlotView Model="{Binding Plot2}" Grid.Column="0" Margin="10"/>
+                    <Border Grid.Column="1" Margin="0,10,10,10" Background="#262626" CornerRadius="4" Padding="6">
+                        <StackPanel>
+
+                            <Border Background="#333333" CornerRadius="3" Padding="6" Margin="0,4,0,4">
+                                <StackPanel>
+                                    <TextBlock Text="Max Speed" Foreground="#AFAFAF" FontSize="11"/>
+                                    <TextBlock Text="{Binding MaxSpeed2, StringFormat={}{0:F1} km/h}" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Background="#333333" CornerRadius="3" Padding="6" Margin="0,4,0,4">
+                                <StackPanel>
+                                    <TextBlock Text="Max Timing" Foreground="#AFAFAF" FontSize="11"/>
+                                    <TextBlock Text="{Binding MaxTiming2, StringFormat={}{0:F1} ms}" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Background="#333333" CornerRadius="3" Padding="6" Margin="0,4,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Ratio Factor" Foreground="#AFAFAF" FontSize="11"/>
+                                    <TextBlock Text="{Binding RatioFactor2, StringFormat={}{0:F2}}" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Grid>
+
+            <Grid Grid.Row="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" Background="#2F2F2F" CornerRadius="3" Padding="8,4" Height="28">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <ComboBox Grid.Column="0"
+                                  ItemsSource="{Binding Plot3Options}"
+                                  SelectedItem="{Binding SelectedPlot3Option}"
+                                  Width="240" Height="22"
+                                  Style="{StaticResource DarkComboBox}"/>
+                        <Border Grid.Column="1" />
+                        <Button Grid.Column="3" Width="28" Height="22" Margin="4,0,0,0"
+                                Background="Transparent" BorderBrush="Transparent"
+                                Foreground="#DDDDDD" ToolTip="Info"
+                                FontFamily="Segoe MDL2 Assets" Content="&#xE946;"/>
+                    </Grid>
+                </Border>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <oxy:PlotView Model="{Binding Plot3}" Grid.Column="0" Margin="10"/>
+                    <Border Grid.Column="1" Margin="0,10,10,10" Background="#262626" CornerRadius="4" Padding="6">
+                        <StackPanel>
+
+                            <Border Background="#333333" CornerRadius="3" Padding="6" Margin="0,4,0,4">
+                                <StackPanel>
+                                    <TextBlock Text="Max Speed" Foreground="#AFAFAF" FontSize="11"/>
+                                    <TextBlock Text="{Binding MaxSpeed3, StringFormat={}{0:F1} km/h}" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Background="#333333" CornerRadius="3" Padding="6" Margin="0,4,0,4">
+                                <StackPanel>
+                                    <TextBlock Text="Max Timing" Foreground="#AFAFAF" FontSize="11"/>
+                                    <TextBlock Text="{Binding MaxTiming3, StringFormat={}{0:F1} ms}" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Background="#333333" CornerRadius="3" Padding="6" Margin="0,4,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Ratio Factor" Foreground="#AFAFAF" FontSize="11"/>
+                                    <TextBlock Text="{Binding RatioFactor3, StringFormat={}{0:F2}}" Foreground="White" FontSize="12" FontWeight="SemiBold"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Grid>
+
+            <!-- Bottom controls moved to row 4 -->
+            <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Command="{Binding LeftCommand}" Margin="10" Background="#333333" Height="50">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <ico:PackIconBoxIcons Kind="RegularArrowToLeft" Margin="10,10,10,10"
+                                              Width="25" Height="25"
+                                              Foreground="Orange"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Margin="10" Background="#333333" Height="50"
+                        Command="{Binding PlayCommand}"
+                        IsHitTestVisible="{Binding IsPlayEnabled}"
+                        Focusable="{Binding IsPlayEnabled}">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <ico:PackIconMaterial Kind="PlayBox" Margin="10,10,10,10"
+                              Width="25" Height="25"
+                              Foreground="{Binding PlayForeground}"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Command="{Binding PauseCommand}" Margin="10" Background="#333333" Height="50"
+                        IsHitTestVisible="{Binding IsPauseEnabled}"
+                        Focusable="{Binding IsPauseEnabled}">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <ico:PackIconMaterial Kind="PauseBox" Margin="10,10,10,10"
+                              Width="25" Height="25"
+                              Foreground="{Binding PauseForeground}"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Command="{Binding RightCommand}" Margin="10" Background="#333333" Height="50">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <ico:PackIconBoxIcons Kind="RegularArrowToRight" Margin="10,10,10,10"
+                              Width="25" Height="25"
+                              Foreground="Orange"/>
+                    </StackPanel>
+                </Button>
+
+                <Button Command="{Binding SpeedCommand}" Margin="10" Background="#333333" Height="50" Width="70">
+                    <TextBlock Text="{Binding SpeedLabel}" FontSize="24" Foreground="Orange" FontWeight="Bold"/>
+                </Button>
+
+                <Button Command="{Binding LoopCommand}" Margin="10" Background="#333333" Height="50">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <ico:PackIconBoxIcons Kind="RegularReset" Margin="10,10,10,10"
+                                              Width="25" Height="25"
+                                              Foreground="Orange"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+        </Grid>
+    </Grid>
+</UserControl>
